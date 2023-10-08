@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://smtpjs.com/v3/smtp.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>TESTING</h1>
+    <label for="fileInput">Archivo</label>
+    <input type='file' accept=".pdf" name='fichiersSupp' id="fileInput"/>
+    <button onClick="sendEmail()">ENVIAR</button>
+    <script>
+         function sendEmail() {
+            var file = document.getElementById("fileInput").files[document.getElementById("fileInput").files.length-1];
+            if(file){
+                const reader = new FileReader()
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                // Use a regex to remove data url part
+                const base64String = reader.result
+                    .replace('data:', '')
+                    .replace(/^.+,/, '');
+                Email.send({
+                SecureToken : "",
+                To : 'EMAIL MA', 
+                From : "MY SMTP EMAIL", 
+                Subject : "Test email", 
+                Body : "Hola" ,
+                Attachments : [{
+                    name : "archivo.pdf",
+                    data: base64String
+                }]
+            }).then( message => alert(message) ); }
+               // console.log(base64String);
+                // Logs wL2dvYWwgbW9yZ...
+            }else{
+                alert('añada un file')
+            }
+        };
+    </script>
+</body>
+</html>
